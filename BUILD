@@ -5,6 +5,7 @@ cc_library(
     ]),
     hdrs = glob([
             "*.h",
+            "topics/*.h",
     ]),
     deps = [
     ],

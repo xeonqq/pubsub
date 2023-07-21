@@ -1,5 +1,5 @@
 #include "node.h"
-#include "position_topic.h"
+#include "topics/position.h"
 
 class SubNode : public Node {
 public:
