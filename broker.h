@@ -6,21 +6,31 @@
 #include <map>
 #include <queue>
 
+template <typename T, int MaxLen, typename Container = std::deque<T>>
+class FixedQueue : public std::queue<T, Container> {
+public:
+  void push(const T &value) {
+    if (this->size() == MaxLen) {
+      this->c.pop_front();
+    }
+    std::queue<T, Container>::push(value);
+  }
+};
+
 class Broker {
-  using TopicQueue = std::vector<Topic>;
+  using TopicQueue = FixedQueue<Topic, 1>;
 
 public:
   void Publish(std::size_t topic_id, Topic topic) {
     auto &q = topic_to_message_queue_[topic_id];
-    q.push_back(std::move(topic));
+    q.push(std::move(topic));
   }
 
   template <typename Func> void Subscribe(std::size_t topic_id, Func &&cb) {
     auto &q = topic_to_message_queue_[topic_id];
-    for (const auto &v : q) {
-      std::forward<Func>(cb)(v);
+    if (!q.empty()) {
       // only pass the lastest one
-      break;
+      std::forward<Func>(cb)(q.back());
     }
   }
 
