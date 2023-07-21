@@ -26,7 +26,7 @@ private:
 
 public:
   template <typename T>
-  Topic(T x) : self_(std::make_shared<Model<T>>(std::move(x))) {}
+  Topic(T x) : self_(std::make_unique<Model<T>>(std::move(x))) {}
 
   template <typename U> friend U GetMessage(const Topic &topic);
 
@@ -35,7 +35,7 @@ private:
     Model(T x) : data_(std::move(x)) {}
     T data_;
   };
-  std::shared_ptr<const Concept> self_;
+  std::unique_ptr<const Concept> self_;
 };
 
 template <typename U> U GetMessage(const Topic &topic) {
