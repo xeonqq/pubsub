@@ -6,9 +6,10 @@ public:
   using Node::Node;
 
   void Init() override {
-    AddPublisher<Position>([]() { return Position{42}; });
+    AddPublisher<Position>([this]() { return Position{x_}; });
   }
 
 private:
-  void StepOnce() override {}
+  void StepOnce() override { ++x_; }
+  int x_{41};
 };
