@@ -27,13 +27,12 @@ protected:
   }
 
   template <typename Message, typename Func> void AddPublisher(Func func) {
-    auto cb = [&func]() -> Topic { return Topic{func()}; };
+    auto cb = [func]() -> Topic { return Topic{func()}; };
     pub_cbs_.emplace_back(GetTopicId<Message>(), cb);
   }
 
 private:
   void Subscribe() {
-
     std::for_each(sub_cbs_.begin(), sub_cbs_.end(), [this](const auto &cb) {
       broker_->Subscribe(cb.first, cb.second);
     });
